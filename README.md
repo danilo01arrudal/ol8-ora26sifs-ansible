@@ -77,7 +77,7 @@ ol8-oracle26aisifs-ansible/
 
 O projeto conta com dois workflows configurados no diretório `.github/workflows/`:
 
-### `deploy-postgres.yml`
+### `deploy-oracle.yml`
 - **Trigger**: `workflow_dispatch` (execução manual).
 - **Executor**: `self-hosted` (runner instalado na própria VM Oracle Linux 8.10).
 - **Etapas**:
@@ -171,7 +171,7 @@ tar xzf ./actions-runner-linux-x64-2.335.1.tar.gz
 3. No inventário, defina `pg_classe=nova`.
 
 ### Alterar parâmetros padrão
-Edite o arquivo `roles/postgresql/vars/main.yml` para modificar os valores padrão da role.
+Edite o arquivo `roles/oracleql/vars/main.yml` para modificar os valores padrão da role.
 
 ---
 
