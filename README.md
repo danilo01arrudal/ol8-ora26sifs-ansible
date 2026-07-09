@@ -1,6 +1,6 @@
 # ⛁ Provisionamento Automatizado do Oracle Database 26ai single instance no filesystem com Ansible
 
-[![GitHub](https://img.shields.io/badge/Repository-danilo01arrudal/ol10--pg18--ansible-blue?logo=github)](https://github.com/danilo01arrudal/ol8-ora26sifs-ansible)
+[![GitHub](https://img.shields.io/badge/Repository-danilo01arrudal/ol8-ora26sifs-ansible-red?logo=github)](https://github.com/danilo01arrudal/ol8-ora26sifs-ansible)
 [![Ansible](https://img.shields.io/badge/Ansible-2.9+-black?logo=ansible)](https://www.ansible.com/)
 [![Oracle](https://img.shields.io/badge/Oracle-26ai-red?logo=oracle)](https://www.oracle.com/database/)
 [![Oracle Linux](https://img.shields.io/badge/Oracle%20Linux-8.10-red?logo=oracle)](https://www.oracle.com/linux/)
