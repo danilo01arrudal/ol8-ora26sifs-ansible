@@ -1,1 +1,52 @@
+- name: Criar estrutura de diretórios ORACLE_BASE e ORACLE_HOME
+  file:
+    path: "{{ oracle_home }}"
+    state: directory
+    owner: oracle
+    group: oinstall
+    mode: '0775'
+    recurse: yes
 
+- name: Criar diretório de scripts para o usuário oracle
+  file:
+    path: /home/oracle/scripts
+    state: directory
+    owner: oracle
+    group: oinstall
+    mode: '0755'
+
+- name: Criar script setEnv.sh
+  template:
+    src: setEnv.sh.j2
+    dest: /home/oracle/scripts/setEnv.sh
+    owner: oracle
+    group: oinstall
+    mode: '0755'
+
+- name: Adicionar setEnv no .bash_profile
+  lineinfile:
+    path: /home/oracle/.bash_profile
+    line: ". /home/oracle/scripts/setEnv.sh"
+
+- name: Criar scripts de inicialização (start_all e stop_all)
+  template:
+    src: "{{ item }}.j2"
+    dest: "/home/oracle/scripts/{{ item }}"
+    owner: oracle
+    group: oinstall
+    mode: '0755'
+  loop:
+    - start_all.sh
+    - stop_all.sh
+
+- name: Configurar arquivo oratab
+  lineinfile:
+    path: /etc/oratab
+    line: "{{ oracle_sid }}:{{ oracle_home }}:Y"
+    create: yes
+
+- name: Configurar servico Systemd (dbora)
+  template:
+    src: dbora.service.j2
+    dest: /lib/systemd/system/dbora.service
+  notify: systemctl daemon-reload e enable dbora
