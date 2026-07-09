@@ -196,7 +196,7 @@ Este projeto está sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) par
 
 ## 🙏 Agradecimentos
 
-- [Database Documentation](https://docs.oracle.com/en/database/) pela excelente base de dados.
+- [Oracle Database Documentation](https://docs.oracle.com/en/database/) pela excelente base de dados.
 - [Ansible](https://www.ansible.com/) pela poderosa ferramenta de automação.
 - [Oracle Linux](https://www.oracle.com/linux/) pela plataforma estável e confiável.
 ```
