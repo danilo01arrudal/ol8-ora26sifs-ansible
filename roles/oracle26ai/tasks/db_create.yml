@@ -1,0 +1,29 @@
+- name: Configurar Listener em modo silencioso (NETCA)
+  become: yes
+  become_user: oracle
+  shell: |
+    {{ oracle_home }}/bin/netca -silent -responseFile {{ oracle_home }}/network/install/netca_typ.rsp
+  args:
+    creates: "{{ oracle_home }}/network/admin/listener.ora"
+
+- name: Criar o banco de dados e PDB em modo silencioso (DBCA)
+  become: yes
+  become_user: oracle
+  shell: >
+    {{ oracle_home }}/bin/dbca -silent -createDatabase 
+    -templateName General_Purpose.dbc 
+    -gdbname {{ oracle_sid }}.{{ oracle_domain }} 
+    -sid {{ oracle_sid }} 
+    -createAsContainerDatabase true 
+    -numberOfPDBs 1 
+    -pdbName {{ oracle_pdb }} 
+    -pdbAdminPassword {{ oracle_sys_password }} 
+    -sysPassword {{ oracle_sys_password }} 
+    -systemPassword {{ oracle_sys_password }} 
+    -emConfiguration NONE 
+    -datafileDestination {{ oracle_base }}/oradata 
+    -storageType FS 
+    -characterSet AL32UTF8 
+    -memoryPercentage 40
+  args:
+    creates: "/etc/oratab"  # O DBCA registra automaticamente no oratab quando bem-sucedido
