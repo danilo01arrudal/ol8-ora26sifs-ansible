@@ -1,5 +1,6 @@
 ---
 - import_tasks: pre_reqs.yml
+- import_tasks: configure.yml
 - import_tasks: software_install.yml
 - import_tasks: db_create.yml
 - import_tasks: post_config.yml
