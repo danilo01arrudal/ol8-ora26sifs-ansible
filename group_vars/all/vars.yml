@@ -1,6 +1,9 @@
 oracle_hostname: "ol826ai"
 oracle_sid: "appscdb"
-oracle_unqname: "appscdb"
+oracle_pdb: "appspdb1"
+oracle_domain: "appsdba.info"
 oracle_base: "/u01/app/oracle"
 oracle_home: "/u01/app/oracle/product/23.26.1/dbhome_1"
 ora_inventory: "/u01/app/oraInventory"
+oracle_sys_password: "SysPassword123" # Altere para algo seguro ou use Ansible Vault
+oracle_zip_path: "/tmp/LINUX.X64_2326100_db_home.zip"
