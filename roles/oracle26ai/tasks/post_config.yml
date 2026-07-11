@@ -1,0 +1,44 @@
+- name: Habilitar autostart do PDB (SAVE STATE)
+  become: yes
+  become_user: oracle
+  shell: |
+    . /home/oracle/scripts/setEnv.sh
+    sqlplus -s / as sysdba <<EOF
+      ALTER SESSION SET CONTAINER={{ oracle_pdb }};
+      ALTER PLUGGABLE DATABASE {{ oracle_pdb }} SAVE STATE;
+      EXIT;
+    EOF
+  register: pdb_state
+  changed_when: "'Pluggable database altered' in pdb_state.stdout"
+
+- name: Configurar tnsnames.ora
+  template:
+    src: tnsnames.ora.j2
+    dest: "{{ oracle_home }}/network/admin/tnsnames.ora"
+    owner: oracle
+    group: oinstall
+    mode: '0644'
+
+- name: Configurar flag 'Y' no oratab para autostart do DBCA
+  lineinfile:
+    path: /etc/oratab
+    regexp: '^{{ oracle_sid }}:'
+    line: '{{ oracle_sid }}:{{ oracle_home }}:Y'
+    state: present
+
+- name: Configurar script start_all.sh e stop_all.sh
+  template:
+    src: "{{ item }}.j2"
+    dest: "/home/oracle/scripts/{{ item }}"
+    owner: oracle
+    group: oinstall
+    mode: '0755'
+  loop:
+    - start_all.sh
+    - stop_all.sh
+
+- name: Habilitar e iniciar serviço dbora (Systemd)
+  template:
+    src: dbora.service.j2
+    dest: /lib/systemd/system/dbora.service
+  notify: systemctl daemon-reload e enable dbora
