@@ -1,0 +1,35 @@
+- name: Copiar e descompactar o binário do Oracle 26ai no ORACLE_HOME
+  unarchive:
+    src: "{{ oracle_zip_path }}"
+    dest: "{{ oracle_home }}"
+    remote_src: yes # mude para 'no' se o zip estiver na pasta files/ do Ansible
+    owner: oracle
+    group: oinstall
+    creates: "{{ oracle_home }}/bin/sqlplus"
+
+- name: Criar arquivo de resposta (Response File) para o runInstaller
+  template:
+    src: db_install.rsp.j2
+    dest: /tmp/db_install.rsp
+    owner: oracle
+    group: oinstall
+
+- name: Executar instalação silenciosa (runInstaller)
+  become: yes
+  become_user: oracle
+  shell: |
+    ./runInstaller -silent -force -waitforcompletion -responseFile /tmp/db_install.rsp
+  args:
+    chdir: "{{ oracle_home }}"
+    creates: "{{ ora_inventory }}/logs"
+  register: install_result
+  failed_when: 
+    - install_result.rc != 0 
+    - "'Successfully Setup Software' not in install_result.stdout"
+
+- name: Executar scripts de root (orainstRoot.sh e root.sh)
+  shell: "{{ item }}"
+  loop:
+    - "{{ ora_inventory }}/orainstRoot.sh"
+    - "{{ oracle_home }}/root.sh"
+  when: install_result.changed
