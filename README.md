@@ -35,28 +35,33 @@ Baseado na documentação oficial e em manuais técnicos, a solução transforma
 ## 🏗️ Estrutura do Projeto
 
 ```plaintext
-ol8-oracle26aisifs-ansible/
+ol8-ora26sifs-ansible/
 ├── group_vars/
 │   └── all/
-│       └── vars.yml                # Variáveis comuns (ORACLE_HOME, SID, Base)
+│       └── vars.yml
 ├── inventory/
-│   └── production                  # Inventário dos hosts gerenciados
+│   └── production
 ├── playbooks/
-│   ├── site.yml                    # Playbook principal de provisionamento
-│   └── uninstall.yml               # Playbook de rollback/desinstalação
+│   ├── site.yml
+│   └── uninstall.yml
 ├── roles/
 │   └── oracle26ai/
+│       ├── files/
+│       │   └── LINUX.X64_233000_db_home.zip    # Arquivo binário (opcionalmente baixado via URL)
 │       ├── tasks/
-│       │   ├── main.yml            # Orquestração das tarefas
-│       │   ├── pre_reqs.yml        # Configuração SO, SELinux, RPMs
-│       │   └── configure.yml       # Criação de scripts, oratab, bash_profile
+│       │   ├── main.yml
+│       │   ├── pre_reqs.yml                    # Ajustes de SO (já criados anteriormente)
+│       │   ├── software_install.yml            # Unzip + runInstaller silencioso + root.sh
+│       │   ├── db_create.yml                   # NETCA + DBCA silencioso
+│       │   └── post_config.yml                 # PDB Save State, TNS, Oratab, Systemd
 │       └── templates/
-│           ├── setEnv.sh.j2        # Template de export de variáveis
-│           ├── start_all.sh.j2     # Script dbstart
-│           ├── stop_all.sh.j2      # Script dbshut
-│           └── dbora.service.j2    # SystemD service unit
-├── ansible.cfg                     # Configuração do Ansible
-└── README.md                       # Este arquivo
+│           ├── db_install.rsp.j2               # Response file p/ runInstaller
+│           ├── tnsnames.ora.j2                 # Template TNS
+│           ├── setEnv.sh.j2
+│           ├── start_all.sh.j2
+│           ├── stop_all.sh.j2
+│           └── dbora.service.j2
+└── README.md
 ```
 
 ---
